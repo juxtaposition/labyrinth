@@ -24,7 +24,7 @@ for (int x=0;x<=(k*n);x=x+k){
    for (int y=0;y<=(k*n);y=y+k){
         //Inicializando las celdas las vamos insertando en el arrelgo "celdas"
      celdas.add(new Celda(x,y,false , false, int(random(0,250))));
-        biCeldas[x][y] = new Celda(x,y,false , false, int(random(0,250)));
+        biCeldas[x][y] = new Celda(x,y,false , false, 250);
      if(x!=k*n){
           line(x,y,x+k,y);
 //celdas.add(new Celda(x,y,x+k,y,false , false, int(random(0,250))));
@@ -72,7 +72,9 @@ boolean checkMove(Celda c, String lado){
   switch(lado.charAt(0)){
     case 'l':
     if(c.getX() - 30 >= 0){
+        if(!biCeldas[c.getX()-30][c.getY()].getVisited()){
        r = true; 
+        }
     }else { r =  false;}
     
     println("Do somthing: "+lado);
@@ -80,7 +82,10 @@ boolean checkMove(Celda c, String lado){
     
     case 'r':
     if(c.getX() + 30 <= 570){
-       r =  true; 
+      if(!biCeldas[c.getX()+30][c.getY()].getVisited()){
+
+       r =  true;
+      } 
     }else { r =  false;}
        
     println("Do Something: "+lado);
@@ -88,7 +93,10 @@ boolean checkMove(Celda c, String lado){
     
     case 'u':
     if(c.getY() - 30 >= 0){
-       r =  true; 
+      if(!biCeldas[c.getX()][c.getY()-30].getVisited()){
+
+       r =  true;
+      } 
     }else { r = false;}
     
     println("Do Something: "+lado);
@@ -96,7 +104,10 @@ boolean checkMove(Celda c, String lado){
     
     case 'd':
     if(c.getY() + 30 <= 570){
+      if(!biCeldas[c.getX()][c.getY()+30].getVisited()){
+
        r =  true; 
+      }
     }else { r = false;}
     
     println("Do Something: "+lado);
@@ -129,11 +140,12 @@ switch(side.charAt(0)){
      temp.setVisited(true);
      temp.setLeft(false);
      recorrido.add(temp);
-     println("Borro L");
-   }else { moveRandom(temp); 
+     //println("Borro L");
+     moveRandom(temp); 
+   }else { 
    println("Moviento no permitodo, necesitamos otro"); }
  
-  println("Valido LEFT");
+  //println("Valido LEFT");
   println(temp.toString());
   break;
   
@@ -145,11 +157,12 @@ switch(side.charAt(0)){
      temp.setRight(false);
      temp.setVisited(true);
      recorrido.add(temp);
-     println("Borro R");
-  } else { moveRandom(temp);
+    // println("Borro R");
+     moveRandom(temp); 
+  } else { 
   println("Moviento no permitodo, necesitamos otro"); }
    
-   println("lado R");
+  // println("lado R");
    println(temp.toString()); 
   break;
  
@@ -161,29 +174,29 @@ switch(side.charAt(0)){
      temp.setUp(false);
      temp.setVisited(true);
      recorrido.add(temp);
-     println("Borro U");
-
-  }else { moveRandom(temp);
+     //println("Borro U");
+moveRandom(temp); 
+  }else { 
   println("Moviento no permitodo, necesitamos otro"); }
 
-    println("Lado U");
+   // println("Lado U");
     println(temp.toString()); 
   break;
   
  case 'd':
  if(checkMove(temp,side)){
-     borraLine(temp.getX()+k, temp.getY()+k,temp.getX(), temp.getY()+k); // Borra Down
+     borraLine(temp.getX(), temp.getY()+k,temp.getX()+k, temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setDown(false);
      temp.setVisited(true);
      recorrido.add(temp);
-    println("Borro D");
-
+    //println("Borro D");
+moveRandom(temp); 
    }else{ moveRandom(temp);
    println("Necesitamos otro moviento"); }
    
-  println("lado D");
+  //println("lado D");
   println(temp.toString()); 
   break;
 
@@ -212,9 +225,11 @@ noStroke();
 
 // Ejemplos particulares
 void celdaColor(int x,int y, int c){
+  noStroke();
   //fill(c,int(random(0,250)),int(random(0,250))); // una malla colorida :D
-  fill(c,0,0); // Una base en ROJO
-  rect(x,y,k,k);
+  fill(c,10,10); // Una base en ROJO
+//  noFill();
+  rect(x+2,y+2,k-3,k-3);
 
 }
 
@@ -231,7 +246,7 @@ Celda temp = celdas.get(i);
       temp = celdas.get(0);
   }
 
-temp.setColor(200);
+temp.setColor(250);
 temp.setVisited(true);
 recorrido.add(temp);
 celdaColor(temp.getX(), temp.getY(),temp.getColor());
