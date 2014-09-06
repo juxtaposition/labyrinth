@@ -420,8 +420,6 @@ return ("("+x+","+y+")"+ "("+z+","+w+")" + " Visited: " + Visited + " Done: " + 
    
 }
 
-
-
 /*//CLase celda
 class Celda {
   float x,y;   // x,y location
