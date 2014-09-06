@@ -420,29 +420,3 @@ return ("("+x+","+y+")"+ "("+z+","+w+")" + " Visited: " + Visited + " Done: " + 
    
 }
 
-
-
-/*//CLase celda
-class Celda {
-  float x,y;   // x,y location
-  float w,h;   // width and height
-  float c; // color
-  // Cell Constructor
-  Cell(float tempX, float tempY, float tempW, float tempH, float tempC) {
-    x = tempX;
-    y = tempY;
-    w = tempW;
-    h = tempH;
-    c = tempC;
-  } 
-  
-  //
-  void moverx() {
-    x=x+k; 
-  }
-
-  void display() {
-    fill(255);
-    rect(x,y,w,h); 
-  }
-}*/
