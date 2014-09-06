@@ -113,14 +113,21 @@ String side = lados[si];
    if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()-k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setVisited(true);
+     recorrido.add(temp);
    }else { println("Moviento no permitodo, necesitamos otro"); }
+ 
   println("Valido LEFT");
-  println(temp.toString()); 
+  println(temp.toString());
+  
  }else if(side == "r"){
   if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()+k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setVisited(true);
+     recorrido.add(temp);
   } else { println("Moviento no permitodo, necesitamos otro"); }
+   
    println("lado R");
    println(temp.toString()); 
 
@@ -128,6 +135,8 @@ String side = lados[si];
   if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()][temp.getY()-k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setVisited(true);
+     recorrido.add(temp);
   }else { println("Moviento no permitodo, necesitamos otro"); }
 
     println("Lado U");
@@ -137,7 +146,10 @@ String side = lados[si];
    if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()][temp.getY()+k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setVisited(true);
+     recorrido.add(temp);
    }else{ println("Necesitamos otro moviento"); }
+   
   println("lado D");
   println(temp.toString()); 
 
@@ -191,6 +203,7 @@ borraLine(temp.getX()+k, temp.getY()+k,temp.getX(), temp.getY()+k); // Borra Dow
 /*fill(temp.getColor());
 ellipse(temp.getX(), temp.getY(),10,10);*/
 println(temp.toString() + " i: "+i); // Información de la CELDA ACTUAL Si es necesario quita el comentario
+recorrido.add(temp);
 return temp;
   
 }
