@@ -57,9 +57,45 @@ moveRandom(initRandom());
 
 
 // Gastando memoria a lo loco 
-void mousePressed() {
+void mousePressed(){
+  
   loop();  
+ 
 }
+
+
+/**
+**@params Celda c
+**@retun String l
+** Verificamos que la celda en la que estamos actualmente tenga un moviento 
+** Si no tiene un moviento sera tiempo de activar el BackTracking Power 
+**/
+String sideEneable(Celda c){
+String l = "l";
+String r = " ";
+boolean lado = (l == "l" || l == "r" || l == "u" || l == "d")? true: false;
+if(lado){
+  if(c.getLeft()){
+    r = "l";
+    return r;
+  }else if(c.getRight()){
+    r = "r";
+   return r; 
+  }else if(c.getUp()){
+    r = "u";
+   return r; 
+  }else if(c.getDown()){
+    r = "d";
+   return r; 
+  }else { r = "e"; } // Ningun lado disponible
+  
+}else { println("MEGA error"); return "e";}
+
+return r;  
+}
+
+
+
 
 
 /**
@@ -70,57 +106,51 @@ void mousePressed() {
 boolean checkMove(Celda c, String lado){  
   boolean r = false;
   
-  switch(lado.charAt(0)){
-    case 'l':
-    if(c.getX() - 30 >= 0){
+  
+  if(lado == "l"){  
+    if(c.getX() - 30 >= 0 && c.getLeft()){
         if(!biCeldas[c.getX()-30][c.getY()].getVisited()){
        r = true; 
-        }else { println("Quiere mover a un Visado Left");  }
-    }else { r =  false;}
-    
-    //println("Do somthing: "+lado);
-    break;
-    
-    case 'r':
-    if(c.getX() + 30 <= 570){
+        }else {println("Quiere mover a un Visado LEFT"); return false;  }
+         
+          }else { r =  false; } 
+  
+  }else if(lado == "r"){
+    if(c.getX() + 30 <= 570 && c.getRight()){
       if(!biCeldas[c.getX()+30][c.getY()].getVisited()){
 
        r =  true;
-      } else {println("Quiere mover a un Visado Right"); }
+      } else {println("Quiere mover a un Visado Right"); return false;}
     }else { r =  false;}
        
-   // println("Do Something: "+lado);
-    break;
-    
-    case 'u':
-    if(c.getY() - 30 >= 0){
+
+ 
+  }else if(lado == "u"){
+    if(c.getY() - 30 >= 0 && c.getUp()){
       if(!biCeldas[c.getX()][c.getY()-30].getVisited()){
 
        r =  true;
-      } else{ println("Quiere mover a un Visado UP"); }
+      } else{ println("Quiere mover a un Visado UP"); return false;}
     }else { r = false;}
     
-   // println("Do Something: "+lado);
-    break;
-    
-    case 'd':
-    if(c.getY() + 30 <= 570){
+  
+
+  }else if(lado == "d"){
+    if(c.getY() + 30 <= 570 && c.getDown()){
       if(!biCeldas[c.getX()][c.getY()+30].getVisited()){
 
        r =  true; 
-      }else { println("Quiere mover a un Visado Down"); }
+      }else { println("Quiere mover a un Visado Down"); return false;}
     }else { r = false;}
-    
-    //println("Do Something: "+lado);
-    break;
-    
-    
-  } // END switch
-  return r;
+
+ }else{ println("backtrak pls");}
+
+  
+   return r;
 }
 
 
-
+//  MEGA Función Ultra Grande
 
 /**
 **@Params Celda c 
@@ -132,90 +162,100 @@ void moveRandom(Celda c){
 Celda temp = c;
 int si = int(random(0,4));
 String side = lados[si];
-switch(side.charAt(0)){
+
+if(sideEneable(c) != "e"){
+
+
+   
   
- case 'l':    
+if(side == "l"){ 
    if(checkMove(temp,side)){
-     borraLine(temp.getX(), temp.getY(),temp.getX(), temp.getY()+k); // Borra Left
-     temp = biCeldas[temp.getX()-k][temp.getY()];
-     celdaColor(temp.getX(),temp.getY(),temp.getColor());
-     temp.setVisited(true);
-     temp.setLeft(false);
-     recorrido.add(temp);
-     //println("Borro L");
-     moveRandom(temp); 
+    temp.setLeft(false); // Ya no esta diponible 
+     borraLine(temp.getX(), temp.getY(),temp.getX(), temp.getY()+k); // Borra Left 
+       // Nos movemos a la celda de la izquierda
+       temp = biCeldas[temp.getX()-k][temp.getY()];
+        // Al mover una celda la celda contigua automanticamente tambien pierde un lado
+         temp.setRight(false);
+           // Iluminamos esa celda
+             celdaColor(temp.getX(),temp.getY(),temp.getColor());
+                // La marcamos como vistada
+                   temp.setVisited(true);
+                     // insertamos al stack el movimiento
+                          recorrido.add(temp);
+     moveRandom(temp); // hay que seguirse moviendo
    }else {      
-     
+     moveRandom(temp);
    println("Moviento no permitodo, necesitamos otro"); }
  
-  //println("Valido LEFT");
-  println(temp.toString());
-  break;
   
- case 'r':
+}else if(side == "r"){
   if(checkMove(temp,side)){
+     temp.setRight(false);
      borraLine(temp.getX()+k, temp.getY(),temp.getX()+k, temp.getY()+k); // Borra Right
      temp = biCeldas[temp.getX()+k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
-     temp.setRight(false);
+     temp.setLeft(false);
      temp.setVisited(true);
      recorrido.add(temp);
-    // println("Borro R");
-     moveRandom(temp); 
-  } else {    // Otro moveRandom2(); 
-
-
+     moveRandom(temp);  // hay que seguirse moviendo
+  } else {   
+moveRandom(temp);
   println("Moviento no permitodo, necesitamos otro"); }
    
-  // println("lado R");
-   println(temp.toString()); 
-  break;
- 
- case 'u':
+   
+   
+}else if(side == "u"){
   if(checkMove(temp,side)){
-     borraLine(temp.getX(), temp.getY(),temp.getX()+k, temp.getY()); // Borra Up
-     temp = biCeldas[temp.getX()][temp.getY()-k];
-     celdaColor(temp.getX(),temp.getY(),temp.getColor());
-     temp.setUp(false);
-     temp.setVisited(true);
-     recorrido.add(temp);
-     //println("Borro U");
-moveRandom(temp); 
+     temp.setUp(false); // Ya no esta diponible 
+       borraLine(temp.getX(), temp.getY(),temp.getX()+k, temp.getY()); // Borra Up
+        // Nos movemos a la celda de arriba
+         temp = biCeldas[temp.getX()][temp.getY()-k];
+         // Al mover una celda la celda contigua automanticamente tambien pierde un lado
+           temp.setUp(false);
+         // Iluminamos la celda 
+           celdaColor(temp.getX(),temp.getY(),temp.getColor());
+           // Actualizamos su estado a vistado : true
+             temp.setVisited(true);
+             // insertamos al stack el movimiento actual
+                recorrido.add(temp);
+              moveRandom(temp); // hay que seguirse moviendo
   }else {     
-            // Otro moveRandom2(); 
-
+moveRandom(temp);
   println("Moviento no permitodo, necesitamos otro"); }
 
-   // println("Lado U");
-    println(temp.toString()); 
-  break;
-  
- case 'd':
+   
+    
+    
+}else if(side == "d"){
  if(checkMove(temp,side)){
+     temp.setDown(false);
      borraLine(temp.getX(), temp.getY()+k,temp.getX()+k, temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
-     celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setDown(false);
+     celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setVisited(true);
      recorrido.add(temp);
-    //println("Borro D");
-moveRandom(temp); 
+      moveRandom(temp); 
    }else{ 
-           // Otro moveRandom2(); 
-
    println("Necesitamos otro moviento"); }
    
-  //println("lado D");
-  println(temp.toString()); 
-  break;
+  
+}
 
- default:
- print ("Algo paso"); 
- break;
+  
  
-} // END SWITCH
+} // End IF 
+else{ println("dios "); }
+ 
+ 
+ 
+
   
 } // END MoveRandom
+
+
+
+
 
 
 
@@ -242,6 +282,7 @@ void celdaColor(int x,int y, int c){
 
 }
 
+
 /**@Params 
 **@Return void
 ** función Inicial la cual posicionara una celda en una localidad random
@@ -250,15 +291,16 @@ Celda initRandom(){
  int i = int(random(0,celdas.size()));
   
 Celda temp = celdas.get(i);
-  if(temp.getX() == 600 || temp.getY() == 600){
+// Evita que selecciona al azar los bordes del mapa
+  if(temp.getX() == 600 || temp.getY() == 600){ 
     //println("No queremos los bordes");
       temp = celdas.get(0);
   }
 
-temp.setColor(250);
-temp.setVisited(true);
-recorrido.add(temp);
-celdaColor(temp.getX(), temp.getY(),temp.getColor());
+temp.setColor(250); // Actualizamos el color a Rojo... (tiene sus razones)
+temp.setVisited(true); // Vistado = True
+recorrido.add(temp); // Metemoa a la pila Para luego hacer backtraking
+celdaColor(temp.getX(), temp.getY(),temp.getColor()); // Iluminamos la celda 
 
 /*fill(temp.getColor());
 ellipse(temp.getX(), temp.getY(),10,10);*/
@@ -279,9 +321,9 @@ class Celda{
   boolean Visited = false; // Si ya fue visitado
   boolean Done = false; // Si ya fue creado
   int farbe = 0; // Su color
-  /** Por default todos los lados estan disponibles en una celda 
+  /** Por default todos los lados ESTÁN disponibles en una celda 
   ** hasta que empiece a avanzar **/
-  boolean Left = true;
+  boolean Left = true; 
   boolean Right = true;
   boolean Up = true;
   boolean Down = true; 
@@ -380,9 +422,14 @@ int getW(){
  return w; 
 }
 
+/**@params 
+**@return int farbe
+** Get Color
+**/
 int getColor(){
  return farbe; 
 }
+
 
 /**
 **@Params 
@@ -391,6 +438,7 @@ int getColor(){
 boolean getVisited(){
  return Visited; 
 }
+
   
 /**
 **@Params
@@ -421,11 +469,10 @@ void setX(int n){
   }
    
   
-  
- /**
- **@Params 
- ** Función que actualiza o inserta un nuevo color a la celda
- **/
+/**
+**@Params
+** Función que actualiza o inserta un nuevo color a la celda
+**/
 void setColor(int c){
   this.farbe = c; 
  }
