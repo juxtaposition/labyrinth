@@ -231,7 +231,7 @@ moveRandom(temp);
      temp.setDown(false);
      borraLine(temp.getX(), temp.getY()+k,temp.getX()+k, temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
-     temp.setDown(false);
+     temp.setUP(false);
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setVisited(true);
      recorrido.add(temp);
