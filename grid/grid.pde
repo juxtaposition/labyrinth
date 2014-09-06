@@ -58,9 +58,7 @@ moveRandom(initRandom());
 **/
 boolean checkMove(Celda c, String lado){  
   boolean r = false;
-  if(x == 600 || y == 600){
-
-  }
+  
   switch(lado.charAt(0)){
     case 'l':
     if(c.getX() - 30 >= 0){
@@ -87,7 +85,7 @@ boolean checkMove(Celda c, String lado){
     break;
     
     case 'd':
-    if(c.getY() + 30 >= 570){
+    if(c.getY() + 30 <= 570){
        r =  true; 
     }else { r = false;}
     
@@ -111,36 +109,39 @@ void moveRandom(Celda c){
 Celda temp = c;
 int si = int(random(0,4));
 String side = lados[si];
-checkMove(temp,side);
  if(side == "l"){    
+   if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()-k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
-     
-   println("Valido LEFT");
+   }else { println("Moviento no permitodo, necesitamos otro"); }
+  println("Valido LEFT");
   println(temp.toString()); 
  }else if(side == "r"){
+  if(checkMove(temp,side)){
      temp = biCeldas[temp.getX()+k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
-   
- println("lado R");
+  } else { println("Moviento no permitodo, necesitamos otro"); }
+   println("lado R");
    println(temp.toString()); 
 
  }else if(side == "u"){
-   temp = biCeldas[temp.getX()][temp.getY()-k];
+  if(checkMove(temp,side)){
+     temp = biCeldas[temp.getX()][temp.getY()-k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
-   
-  println("Lado U");
+  }else { println("Moviento no permitodo, necesitamos otro"); }
+
+    println("Lado U");
     println(temp.toString()); 
 
  }else if(side == "d"){
-   temp = biCeldas[temp.getX()][temp.getY()+k];
+   if(checkMove(temp,side)){
+     temp = biCeldas[temp.getX()][temp.getY()+k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
-     
-println("lado D");
+   }else{ println("Necesitamos otro moviento"); }
+  println("lado D");
   println(temp.toString()); 
 
- } else {print ("Algo paso"); 
-       }
+ } else {print ("Algo paso"); }
   
 } // END MoveRandom
 
@@ -175,6 +176,10 @@ Celda initRandom(){
  int i = int(random(0,celdas.size()));
   
 Celda temp = celdas.get(i);
+if(temp.getX() == 600 || temp.getY() == 600){
+println("No queremos los bordes");
+temp = celdas.get(0);
+  }
 temp.setColor(200);
 temp.setVisited(true);
 celdaColor(temp.getX(), temp.getY(),temp.getColor());
@@ -187,6 +192,7 @@ borraLine(temp.getX()+k, temp.getY()+k,temp.getX(), temp.getY()+k); // Borra Dow
 ellipse(temp.getX(), temp.getY(),10,10);*/
 println(temp.toString() + " i: "+i); // Información de la CELDA ACTUAL Si es necesario quita el comentario
 return temp;
+  
 }
 
 
@@ -413,6 +419,8 @@ return ("("+x+","+y+")"+ "("+z+","+w+")" + " Visited: " + Visited + " Done: " + 
 } 
    
 }
+
+
 
 /*//CLase celda
 class Celda {
