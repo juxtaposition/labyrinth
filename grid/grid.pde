@@ -26,6 +26,7 @@ for (int x=0;x<=(k*n);x=x+k){
      celdas.add(new Celda(x,y,false , false, int(random(0,250))));
         biCeldas[x][y] = new Celda(x,y,false , false, 250);
      if(x!=k*n){
+       strokeWeight(2);
           line(x,y,x+k,y);
 //celdas.add(new Celda(x,y,x+k,y,false , false, int(random(0,250))));
 
@@ -74,10 +75,10 @@ boolean checkMove(Celda c, String lado){
     if(c.getX() - 30 >= 0){
         if(!biCeldas[c.getX()-30][c.getY()].getVisited()){
        r = true; 
-        }
+        }else { println("Quiere mover a un Visado Left");  }
     }else { r =  false;}
     
-    println("Do somthing: "+lado);
+    //println("Do somthing: "+lado);
     break;
     
     case 'r':
@@ -85,10 +86,10 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()+30][c.getY()].getVisited()){
 
        r =  true;
-      } 
+      } else {println("Quiere mover a un Visado Right"); }
     }else { r =  false;}
        
-    println("Do Something: "+lado);
+   // println("Do Something: "+lado);
     break;
     
     case 'u':
@@ -96,10 +97,10 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()][c.getY()-30].getVisited()){
 
        r =  true;
-      } 
+      } else{ println("Quiere mover a un Visado UP"); }
     }else { r = false;}
     
-    println("Do Something: "+lado);
+   // println("Do Something: "+lado);
     break;
     
     case 'd':
@@ -107,16 +108,17 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()][c.getY()+30].getVisited()){
 
        r =  true; 
-      }
+      }else { println("Quiere mover a un Visado Down"); }
     }else { r = false;}
     
-    println("Do Something: "+lado);
+    //println("Do Something: "+lado);
     break;
     
     
   } // END switch
   return r;
 }
+
 
 
 
@@ -142,7 +144,8 @@ switch(side.charAt(0)){
      recorrido.add(temp);
      //println("Borro L");
      moveRandom(temp); 
-   }else { 
+   }else {      
+     
    println("Moviento no permitodo, necesitamos otro"); }
  
   //println("Valido LEFT");
@@ -159,7 +162,9 @@ switch(side.charAt(0)){
      recorrido.add(temp);
     // println("Borro R");
      moveRandom(temp); 
-  } else { 
+  } else {    // Otro moveRandom2(); 
+
+
   println("Moviento no permitodo, necesitamos otro"); }
    
   // println("lado R");
@@ -176,7 +181,9 @@ switch(side.charAt(0)){
      recorrido.add(temp);
      //println("Borro U");
 moveRandom(temp); 
-  }else { 
+  }else {     
+            // Otro moveRandom2(); 
+
   println("Moviento no permitodo, necesitamos otro"); }
 
    // println("Lado U");
@@ -193,7 +200,9 @@ moveRandom(temp);
      recorrido.add(temp);
     //println("Borro D");
 moveRandom(temp); 
-   }else{ moveRandom(temp);
+   }else{ 
+           // Otro moveRandom2(); 
+
    println("Necesitamos otro moviento"); }
    
   //println("lado D");
