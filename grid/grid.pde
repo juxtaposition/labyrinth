@@ -111,9 +111,11 @@ int si = int(random(0,4));
 String side = lados[si];
  if(side == "l"){    
    if(checkMove(temp,side)){
+     borraLine(temp.getX(), temp.getY(),temp.getX(), temp.getY()+k); // Borra Left
      temp = biCeldas[temp.getX()-k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setVisited(true);
+     temp.setLeft(false);
      recorrido.add(temp);
    }else { println("Moviento no permitodo, necesitamos otro"); }
  
@@ -122,8 +124,10 @@ String side = lados[si];
   
  }else if(side == "r"){
   if(checkMove(temp,side)){
+     borraLine(temp.getX()+k, temp.getY(),temp.getX()+k, temp.getY()+k); // Borra Right
      temp = biCeldas[temp.getX()+k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setRight(false);
      temp.setVisited(true);
      recorrido.add(temp);
   } else { println("Moviento no permitodo, necesitamos otro"); }
@@ -133,8 +137,10 @@ String side = lados[si];
 
  }else if(side == "u"){
   if(checkMove(temp,side)){
+     borraLine(temp.getX(), temp.getY(),temp.getX()+k, temp.getY()); // Borra Up
      temp = biCeldas[temp.getX()][temp.getY()-k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setUp(false);
      temp.setVisited(true);
      recorrido.add(temp);
   }else { println("Moviento no permitodo, necesitamos otro"); }
@@ -144,8 +150,10 @@ String side = lados[si];
 
  }else if(side == "d"){
    if(checkMove(temp,side)){
+     borraLine(temp.getX()+k, temp.getY()+k,temp.getX(), temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
+     temp.setDown(false);
      temp.setVisited(true);
      recorrido.add(temp);
    }else{ println("Necesitamos otro moviento"); }
@@ -195,10 +203,6 @@ temp = celdas.get(0);
 temp.setColor(200);
 temp.setVisited(true);
 celdaColor(temp.getX(), temp.getY(),temp.getColor());
-/*borraLine(temp.getX(), temp.getY(),temp.getX()+k, temp.getY()); // Borra Top
-borraLine(temp.getX(), temp.getY(),temp.getX(), temp.getY()+k); // Borra Left
-borraLine(temp.getX()+k, temp.getY(),temp.getX()+k, temp.getY()+k); // Borra Left 
-borraLine(temp.getX()+k, temp.getY()+k,temp.getX(), temp.getY()+k); // Borra Down*/ 
 
 /*fill(temp.getColor());
 ellipse(temp.getX(), temp.getY(),10,10);*/
@@ -283,7 +287,6 @@ boolean getUp(){
 boolean getDown(){
   return Down;
 }
-
 
 
 /**
@@ -419,7 +422,6 @@ void setUp(boolean l){
 void setDown(boolean l){
  this.Down = l; 
 }
-
 
  
 /**
