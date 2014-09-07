@@ -4,16 +4,17 @@ String[] lados = {"l","r","u","d"}; // Movimientos posibles
 
 
 void setup(){
-background(250);
+background(120,120,120,14);
 recorrido = new ArrayList<Celda>();
 celdas = new ArrayList<Celda>();
-noLoop();
+//noLoop();
 int k=30,n=20;
 size(n*k+10,n*k+10);
 frameRate(5);
 }
 
-
+boolean spamclickfukingyourself = true;
+Celda salida = new Celda(0,0,false,false,0);
 int k=30,n=20;
 Celda[][] biCeldas = new Celda[(n*k)+1][(n*k)+1];
 
@@ -51,17 +52,77 @@ celdaColor(temp.getX(), temp.getY(),temp.getColor());
 
   }
 } */
+ // moveRandom(initRandom());
 
-moveRandom(initRandom());
 } // END DRAW 
 
 
 // Gastando memoria a lo loco 
+
 void mousePressed(){
   
+  if(spamclickfukingyourself){
+    
+   Celda temp = initRandom();
+   spamclickfukingyourself = false;
+   
+   
+     while(sideEnable(temp) != "e"){
+ temp = moveRandom(temp);
+  }
+  
+  
+  backTraking(temp); 
+  
+  }
+  else{
+     Celda temp = salida;
+       while(sideEnable(temp) != "e"){
+ temp = moveRandom(temp);
+  }
+  backTraking(temp); 
+  
+
+  }
   loop();  
  
 }
+
+
+
+// DIOS MIO ESTE PROGRAMA ME TIENE HASTA EL COPETE!!!!
+// Backtraking Power 
+void backTraking(Celda c){
+  println(recorrido.size());
+  Celda temp = c;
+  celdaColor(temp.getX(),temp.getY(),0); 
+
+ if(recorrido.size() != 0){
+  for(int i = recorrido.size()-1;i>0;i--){
+    if(sideEnable(recorrido.get(i)) != "e"){
+      temp = recorrido.get(i);
+   //  moveRandom(recorrido.get(i));
+  // println("tiene salidas");
+   celdaColor(temp.getX(),temp.getY(),190);
+   salida = temp;
+     break;
+    }else{
+        celdaColor(recorrido.get(i).getX(),recorrido.get(i).getY(),0);
+     recorrido.remove(i);
+       println(recorrido.size());
+
+ 
+    }
+   
+      // println("dios mio");
+//celdaColor(temp.getX(),temp.getY(),0); 
+  } moveRandom(temp);
+
+ }
+
+}
+
+
 
 
 /**
@@ -70,27 +131,26 @@ void mousePressed(){
 ** Verificamos que la celda en la que estamos actualmente tenga un moviento 
 ** Si no tiene un moviento sera tiempo de activar el BackTracking Power 
 **/
-String sideEneable(Celda c){
-String l = "l";
-String r = " ";
-boolean lado = (l == "l" || l == "r" || l == "u" || l == "d")? true: false;
-if(lado){
-  if(c.getLeft()){
-    r = "l";
-    return r;
-  }else if(c.getRight()){
-    r = "r";
-   return r; 
-  }else if(c.getUp()){
-    r = "u";
-   return r; 
-  }else if(c.getDown()){
-    r = "d";
-   return r; 
-  }else { r = "e"; } // Ningun lado disponible
-  
-}else { println("MEGA error"); return "e";}
+String sideEnable(Celda c){
 
+String r = " ";
+
+  if(checkMove(c, "l")){
+    r = "l";
+   
+  }else if(checkMove(c, "r")){
+    r = "r";
+  
+  }else if(checkMove(c, "u")){
+    r = "u";
+  
+  }else if(checkMove(c, "d")){
+    r = "d";
+   
+  }else {  
+    //celdaColor(c.getX(),c.getY(),0);
+ r = "e"; } // Ningun lado disponible
+  
 return r;  
 }
 
@@ -111,7 +171,9 @@ boolean checkMove(Celda c, String lado){
     if(c.getX() - 30 >= 0 && c.getLeft()){
         if(!biCeldas[c.getX()-30][c.getY()].getVisited()){
        r = true; 
-        }else {println("Quiere mover a un Visado LEFT"); return false;  }
+        }else {
+     //   println("Quiere mover a un Visado LEFT");
+      return false;  }
          
           }else { r =  false; } 
   
@@ -120,7 +182,9 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()+30][c.getY()].getVisited()){
 
        r =  true;
-      } else {println("Quiere mover a un Visado Right"); return false;}
+      } else {
+     // println("Quiere mover a un Visado Right"); 
+    return false;}
     }else { r =  false;}
        
 
@@ -130,7 +194,9 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()][c.getY()-30].getVisited()){
 
        r =  true;
-      } else{ println("Quiere mover a un Visado UP"); return false;}
+      } else{ 
+     // println("Quiere mover a un Visado UP");
+    return false;}
     }else { r = false;}
     
   
@@ -140,14 +206,26 @@ boolean checkMove(Celda c, String lado){
       if(!biCeldas[c.getX()][c.getY()+30].getVisited()){
 
        r =  true; 
-      }else { println("Quiere mover a un Visado Down"); return false;}
-    }else { r = false;}
+      }else { 
+      //println("Quiere mover a un Visado Down"); 
+         return false;
+            }
+    }// If que no salga del mapa
+    else { 
+        
+          return false;
+  }
 
- }else{ println("backtrak pls");}
 
+  }
   
    return r;
 }
+
+
+
+
+
 
 
 //  MEGA Función Ultra Grande
@@ -157,14 +235,16 @@ boolean checkMove(Celda c, String lado){
 **@return
 **Método encargado de mover una posición la celda. de manera Aleatoria
 **/
-void moveRandom(Celda c){
+Celda moveRandom(Celda c){
   
 Celda temp = c;
 int si = int(random(0,4));
 String side = lados[si];
 
-if(sideEneable(c) != "e"){
 
+
+
+if(sideEnable(c) != "e"){
 
    
   
@@ -182,10 +262,11 @@ if(side == "l"){
                    temp.setVisited(true);
                      // insertamos al stack el movimiento
                           recorrido.add(temp);
-     moveRandom(temp); // hay que seguirse moviendo
+    return temp;
    }else {      
-     moveRandom(temp);
-   println("Moviento no permitodo, necesitamos otro"); }
+     return temp;
+  // println("Moviento no permitodo, necesitamos otro"); 
+}
  
   
 }else if(side == "r"){
@@ -197,10 +278,11 @@ if(side == "l"){
      temp.setLeft(false);
      temp.setVisited(true);
      recorrido.add(temp);
-     moveRandom(temp);  // hay que seguirse moviendo
+    return temp;
   } else {   
-moveRandom(temp);
-  println("Moviento no permitodo, necesitamos otro"); }
+    return temp;
+//  println("Moviento no permitodo, necesitamos otro"); 
+}
    
    
    
@@ -211,17 +293,18 @@ moveRandom(temp);
         // Nos movemos a la celda de arriba
          temp = biCeldas[temp.getX()][temp.getY()-k];
          // Al mover una celda la celda contigua automanticamente tambien pierde un lado
-           temp.setUp(false);
+           temp.setDown(false);
          // Iluminamos la celda 
            celdaColor(temp.getX(),temp.getY(),temp.getColor());
            // Actualizamos su estado a vistado : true
              temp.setVisited(true);
              // insertamos al stack el movimiento actual
                 recorrido.add(temp);
-              moveRandom(temp); // hay que seguirse moviendo
+    return temp;
   }else {     
-moveRandom(temp);
-  println("Moviento no permitodo, necesitamos otro"); }
+    return temp;
+  //println("Moviento no permitodo, necesitamos otro");
+  }
 
    
     
@@ -231,24 +314,35 @@ moveRandom(temp);
      temp.setDown(false);
      borraLine(temp.getX(), temp.getY()+k,temp.getX()+k, temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
-     temp.setUP(false);
+     temp.setUp(false);
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
      temp.setVisited(true);
      recorrido.add(temp);
-      moveRandom(temp); 
+    return temp;
    }else{ 
-   println("Necesitamos otro moviento"); }
+     
+
+   //println("Necesitamos otro moviento " +sideEnable(temp)); 
+
+
    
-  
-}
+ }
+       return temp;
 
   
+} // End else if
+else{ 
+     
+    }
+
  
 } // End IF 
-else{ println("dios "); }
+  else{ println("dios ");
+  }
  
  
- 
+     return temp;
+
 
   
 } // END MoveRandom
@@ -265,7 +359,7 @@ else{ println("dios "); }
 ** Función que borra un lado de la celda. 
 **/
 void borraLine(int x,int y,int z,int w){
-stroke(250);
+stroke(250,250,250);
 line(x,y,z,w);
 noStroke();
 }
@@ -276,7 +370,7 @@ noStroke();
 void celdaColor(int x,int y, int c){
   noStroke();
   //fill(c,int(random(0,250)),int(random(0,250))); // una malla colorida :D
-  fill(c,10,10); // Una base en ROJO
+  fill(c,200,210); // Una base en ROJO
 //  noFill();
   rect(x+2,y+2,k-3,k-3);
 
