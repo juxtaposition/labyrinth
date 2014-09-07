@@ -10,7 +10,7 @@ celdas = new ArrayList<Celda>();
 //noLoop();
 int k=30,n=20;
 size(n*k+10,n*k+10);
-frameRate(5);
+frameRate(6);
 }
 
 boolean spamclickfukingyourself = true;
@@ -39,6 +39,40 @@ for (int x=0;x<=(k*n);x=x+k){
 
 }// END SPAMCLIKFUKINGYOURSELF
 
+    if (mousePressed == true) {
+      loop();
+  // Evitar que este entrando constatemente solo queremos que initRandom corra una vez
+  if(spamclickfukingyourself){
+    
+   Celda temp = initRandom();
+   spamclickfukingyourself = false;
+   //mientras se pueda recorrer las celdas   
+     while(sideEnable(temp) != "e"){
+ temp = moveRandom(temp);
+  }
+  
+  // llegamos a una posicion sin salida tenemos que hacer BackTracking
+  backTraking(temp); 
+  
+  } // END SPAMCLIKFUKINGYOURSELF
+  
+  // Cuando ya entreo initRandom()
+  else{
+     Celda temp = salida;
+       while(sideEnable(temp) != "e"){
+ temp = moveRandom(temp);
+  } // END WHILE
+  backTraking(temp); 
+  
+
+  } // END ELSE
+
+} // End   mouseButton = LEFT
+ else if (mouseButton == RIGHT) {
+   noLoop();
+   println("No more LOOP");
+  } else {}
+
 
 } // END DRAW 
 
@@ -47,32 +81,12 @@ for (int x=0;x<=(k*n);x=x+k){
 
 void mousePressed(){
   
-  if(spamclickfukingyourself){
-    
-   Celda temp = initRandom();
-   spamclickfukingyourself = false;
-   
-   
-     while(sideEnable(temp) != "e"){
- temp = moveRandom(temp);
-  }
-  
-  
-  backTraking(temp); 
-  
-  }
-  else{
-     Celda temp = salida;
-       while(sideEnable(temp) != "e"){
- temp = moveRandom(temp);
-  }
-  backTraking(temp); 
-  
 
-  }
-  loop();  
- 
-}
+    loop();  
+
+
+}// END  MOUSEPRESED()
+
 
 
 
