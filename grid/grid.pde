@@ -4,7 +4,7 @@ String[] lados = {"l","r","u","d"}; // Movimientos posibles
 
 
 void setup(){
-background(120,120,120,14);
+background(120,120,120);
 recorrido = new ArrayList<Celda>();
 celdas = new ArrayList<Celda>();
 //noLoop();
@@ -36,7 +36,6 @@ for (int x=0;x<=(k*n);x=x+k){
       }    
    }
 }
-   spamclickfukingyourself = false;
 
 }// END SPAMCLIKFUKINGYOURSELF
 
@@ -88,8 +87,8 @@ void backTraking(Celda c){
   for(int i = recorrido.size()-1;i>0;i--){
     if(sideEnable(recorrido.get(i)) != "e"){
       temp = recorrido.get(i);
-   //  moveRandom(recorrido.get(i));
-  // println("tiene salidas");
+  
+
    celdaColor(temp.getX(),temp.getY(),190);
    salida = temp;
      break;
@@ -134,7 +133,7 @@ String r = " ";
     r = "d";
    
   }else {  
-    //celdaColor(c.getX(),c.getY(),0);
+  
  r = "e"; } // Ningun lado disponible
   
 return r;  
@@ -252,7 +251,6 @@ if(side == "l"){
     return temp;
    }else {      
      return temp;
-  // println("Moviento no permitodo, necesitamos otro"); 
 }
  
   
@@ -270,7 +268,6 @@ if(side == "l"){
     return temp;
   } else {   
     return temp;
-//  println("Moviento no permitodo, necesitamos otro"); 
 }
    
    
@@ -294,7 +291,6 @@ if(side == "l"){
     return temp;
   }else {     
     return temp;
-  //println("Moviento no permitodo, necesitamos otro");
   }
 
    
@@ -346,20 +342,20 @@ if(side == "l"){
 ** Función que borra un lado de la celda. 
 **/
 void borraLine(int x,int y,int z,int w){
-stroke(250,250,250);
+
+stroke(0,190,190);
 line(x,y,z,w);
-noStroke();
+
 }
 
 
 
 // Ejemplos particulares
 void celdaColor(int x,int y, int c){
+ 
   noStroke();
-  //fill(c,int(random(0,250)),int(random(0,250))); // una malla colorida :D
-  fill(c,200,210); // Una base en ROJO
-//  noFill();
-  rect(x+2,y+2,k-3,k-3);
+  fill(c,190,190); // Una base en ROJO
+  rect(x+1,y+1,k-2,k-2);
 
 }
 
@@ -383,9 +379,6 @@ temp.setVisited(true); // Vistado = True
 recorrido.add(temp); // Metemoa a la pila Para luego hacer backtraking
 celdaColor(temp.getX(), temp.getY(),temp.getColor()); // Iluminamos la celda 
 
-/*fill(temp.getColor());
-ellipse(temp.getX(), temp.getY(),10,10);*/
-//println(temp.toString() + " i: "+i); // Información de la CELDA ACTUAL Si es necesario quita el comentario
   return temp;
   
 }
@@ -419,16 +412,7 @@ class Celda{
   this.farbe = c;
 }
   
-  
-  Celda(int x,int y,int z, int w, boolean v, boolean d, int c){ // Constructor simple
-  this.x = x; 
-  this.y = y;
-  this.z = z;
-  this.w = w;
-  Visited = v;
-  Done = d;
-  this.farbe = c;
-}
+ 
 
 /**
 **@Params
@@ -485,23 +469,7 @@ int getY(){
  return y; 
 }
 
-/**
-**@Params 
-**@Return z
-** Método get de Z
-**/
-int getZ(){
- return z; 
-}
 
-/**
-**@Params 
-**@Return w
-** Método get de W
-**/
-int getW(){
- return w; 
-}
 
 /**@params 
 **@return int farbe
