@@ -21,6 +21,7 @@ Celda[][] biCeldas = new Celda[(n*k)+1][(n*k)+1];
 void draw(){
 int k=30,n=20;
 
+if( spamclickfukingyourself){
 for (int x=0;x<=(k*n);x=x+k){
    for (int y=0;y<=(k*n);y=y+k){
         //Inicializando las celdas las vamos insertando en el arrelgo "celdas"
@@ -29,30 +30,16 @@ for (int x=0;x<=(k*n);x=x+k){
      if(x!=k*n){
        strokeWeight(2);
           line(x,y,x+k,y);
-//celdas.add(new Celda(x,y,x+k,y,false , false, int(random(0,250))));
-
-             }
+            }
       if(y!=k*n){
-//celdas.add(new Celda(x,y,x,y+k,false , false, int(random(0,250))));
           line(x,y,x,y+k);
       }    
    }
 }
+   spamclickfukingyourself = false;
 
-/**
-Código que muestra las celdas con  su respectivo color.
-**/
+}// END SPAMCLIKFUKINGYOURSELF
 
-/*for(int i=0;i<n*k;i=i+k){
-  for(int j = 0;j<n*k;j=j+k){
-
-    //println(biCeldas[i][j]);
-Celda temp = biCeldas[i][j]; 
-celdaColor(temp.getX(), temp.getY(),temp.getColor());
-
-  }
-} */
- // moveRandom(initRandom());
 
 } // END DRAW 
 
@@ -107,15 +94,14 @@ void backTraking(Celda c){
    salida = temp;
      break;
     }else{
+             println(recorrido.get(i).toString());
+
         celdaColor(recorrido.get(i).getX(),recorrido.get(i).getY(),0);
      recorrido.remove(i);
-       println(recorrido.size());
 
  
     }
    
-      // println("dios mio");
-//celdaColor(temp.getX(),temp.getY(),0); 
   } moveRandom(temp);
 
  }
@@ -251,6 +237,7 @@ if(sideEnable(c) != "e"){
 if(side == "l"){ 
    if(checkMove(temp,side)){
     temp.setLeft(false); // Ya no esta diponible 
+     temp.setVisited(true);// POr aquello de las malditas dudas
      borraLine(temp.getX(), temp.getY(),temp.getX(), temp.getY()+k); // Borra Left 
        // Nos movemos a la celda de la izquierda
        temp = biCeldas[temp.getX()-k][temp.getY()];
@@ -272,6 +259,8 @@ if(side == "l"){
 }else if(side == "r"){
   if(checkMove(temp,side)){
      temp.setRight(false);
+          temp.setVisited(true);// POr aquello de las malditas dudas
+
      borraLine(temp.getX()+k, temp.getY(),temp.getX()+k, temp.getY()+k); // Borra Right
      temp = biCeldas[temp.getX()+k][temp.getY()];
      celdaColor(temp.getX(),temp.getY(),temp.getColor());
@@ -289,6 +278,8 @@ if(side == "l"){
 }else if(side == "u"){
   if(checkMove(temp,side)){
      temp.setUp(false); // Ya no esta diponible 
+          temp.setVisited(true);// POr aquello de las malditas dudas
+
        borraLine(temp.getX(), temp.getY(),temp.getX()+k, temp.getY()); // Borra Up
         // Nos movemos a la celda de arriba
          temp = biCeldas[temp.getX()][temp.getY()-k];
@@ -312,6 +303,8 @@ if(side == "l"){
 }else if(side == "d"){
  if(checkMove(temp,side)){
      temp.setDown(false);
+          temp.setVisited(true);// POr aquello de las malditas dudas
+
      borraLine(temp.getX(), temp.getY()+k,temp.getX()+k, temp.getY()+k); // Borra Down
      temp = biCeldas[temp.getX()][temp.getY()+k];
      temp.setUp(false);
@@ -321,19 +314,13 @@ if(side == "l"){
     return temp;
    }else{ 
      
-
-   //println("Necesitamos otro moviento " +sideEnable(temp)); 
-
-
-   
+ 
  }
        return temp;
 
   
-} // End else if
-else{ 
-     
-    }
+} // End elseif
+
 
  
 } // End IF 
