@@ -1,25 +1,34 @@
 ArrayList<Celda> celdas; // Conjunto con todas las CELDAS o.o
-ArrayList<Celda> recorrido; // Movimientos realizados, (STACK) 
+ArrayList<Celda> recorrido; // Movimientos realizados, (STACK)
 String[] lados = {"l","r","u","d"}; // Movimientos posibles
 
+PrintWriter Save;
+
+int k=30,n=5;
 
 void setup(){
+Save = createWriter("laberinto.txt"); 
 background(120,120,120);
 recorrido = new ArrayList<Celda>();
 celdas = new ArrayList<Celda>();
 //noLoop();
-int k=30,n=20;
+//int k=40,n=20;
 size(n*k+10,n*k+10);
 frameRate(6);
+      frame.setTitle("Laberinto Cool de " +k + " por " + n); 
+       Save.println(k+" "+ n);
 }
 
 boolean spamclickfukingyourself = true;
-Celda salida = new Celda(0,0,false,false,0);
-int k=30,n=20;
-Celda[][] biCeldas = new Celda[(n*k)+1][(n*k)+1];
+Celda salida = new Celda(0,0,false,false,0); // La salida mas cercana.
+//int k=40,n=20;
+// Celdas Iniciales
+Celda[][] biCeldas = new Celda[(k*n)+1][(k*n)+1];
+
+
 
 void draw(){
-int k=30,n=20;
+//int k=40,n=20;
 
 if( spamclickfukingyourself){
 for (int x=0;x<=(k*n);x=x+k){
@@ -77,23 +86,49 @@ for (int x=0;x<=(k*n);x=x+k){
 } // END DRAW 
 
 
+
 // Gastando memoria a lo loco 
-
 void mousePressed(){
-  
-
     loop();  
-
-
 }// END  MOUSEPRESED()
 
 
 
 
-// DIOS MIO ESTE PROGRAMA ME TIENE HASTA EL COPETE!!!!
-// Backtraking Power 
+/**
+**@params 
+**@return PrintWriter Save
+** Función que se encargara de guardar en un archivo de texto
+** el resulto final - Que es nuestro laberinto
+**/
+void keyPressed(){
+ 
+  if(key == CODED){
+     if(keyCode  == UP){   
+        Save.flush();
+        Save.close();
+       
+      }
+   }
+
+  
+  
+}
+
+
+
+
+/** 
+**@params Celda
+**@return void
+** Backtraking Power, Aqui es donde empieza la magia, cuando nuestra función 
+** initRando() se queda atascada, entra BackTraking y empieza a buscar salidas posibles 
+** para que initRandom puede seguir moviendose
+** Eventulamente no se podra mover más y eso es cuando el arreglo de "Recorridos" - Stack
+** ya o tiene elementos.
+**/
 void backTraking(Celda c){
-  println(recorrido.size());
+ // println(recorrido.size());
   Celda temp = c;
   celdaColor(temp.getX(),temp.getY(),0); 
 
@@ -101,21 +136,30 @@ void backTraking(Celda c){
   for(int i = recorrido.size()-1;i>0;i--){
     if(sideEnable(recorrido.get(i)) != "e"){
       temp = recorrido.get(i);
-  
+       celdaColor(temp.getX(),temp.getY(),190);
+         salida = temp;
+          
+           // println(recorrido.get(i).toString());
+           // Save.println(recorrido.get(i).toSalida());
 
-   celdaColor(temp.getX(),temp.getY(),190);
-   salida = temp;
-     break;
-    }else{
-             println(recorrido.get(i).toString());
+           break;
+          }else{  
+             //println(recorrido.get(i).toString());
+                  Save.println(recorrido.get(i).toSalida());
+        Celda bar = recorrido.get(i);
+        Celda foo = biCeldas[bar.getX()][bar.getY()];
+         foo.setVisited(true);
+         biCeldas[bar.getX()][bar.getY()] = foo;
 
-        celdaColor(recorrido.get(i).getX(),recorrido.get(i).getY(),0);
-     recorrido.remove(i);
-
+            celdaColor(recorrido.get(i).getX(),recorrido.get(i).getY(),0);
+         recorrido.remove(i);
+         
  
     }
    
-  } moveRandom(temp);
+  } 
+  
+  moveRandom(temp);
 
  }
 
@@ -167,8 +211,8 @@ boolean checkMove(Celda c, String lado){
   
   
   if(lado == "l"){  
-    if(c.getX() - 30 >= 0 && c.getLeft()){
-        if(!biCeldas[c.getX()-30][c.getY()].getVisited()){
+    if(c.getX() - k >= 0 && c.getLeft()){
+        if(!biCeldas[c.getX()-k][c.getY()].getVisited()){
        r = true; 
         }else {
      //   println("Quiere mover a un Visado LEFT");
@@ -177,8 +221,8 @@ boolean checkMove(Celda c, String lado){
           }else { r =  false; } 
   
   }else if(lado == "r"){
-    if(c.getX() + 30 <= 570 && c.getRight()){
-      if(!biCeldas[c.getX()+30][c.getY()].getVisited()){
+    if(c.getX() + k <= ((n*k)-k) && c.getRight()){
+      if(!biCeldas[c.getX()+k][c.getY()].getVisited()){
 
        r =  true;
       } else {
@@ -189,8 +233,8 @@ boolean checkMove(Celda c, String lado){
 
  
   }else if(lado == "u"){
-    if(c.getY() - 30 >= 0 && c.getUp()){
-      if(!biCeldas[c.getX()][c.getY()-30].getVisited()){
+    if(c.getY() - k >= 0 && c.getUp()){
+      if(!biCeldas[c.getX()][c.getY()-k].getVisited()){
 
        r =  true;
       } else{ 
@@ -201,8 +245,8 @@ boolean checkMove(Celda c, String lado){
   
 
   }else if(lado == "d"){
-    if(c.getY() + 30 <= 570 && c.getDown()){
-      if(!biCeldas[c.getX()][c.getY()+30].getVisited()){
+    if(c.getY() + k <= ((n*k)-k) && c.getDown()){
+      if(!biCeldas[c.getX()][c.getY()+k].getVisited()){
 
        r =  true; 
       }else { 
@@ -271,7 +315,7 @@ if(side == "l"){
 }else if(side == "r"){
   if(checkMove(temp,side)){
      temp.setRight(false);
-          temp.setVisited(true);// POr aquello de las malditas dudas
+       temp.setVisited(true);// POr aquello de las malditas dudas
 
      borraLine(temp.getX()+k, temp.getY(),temp.getX()+k, temp.getY()+k); // Borra Right
      temp = biCeldas[temp.getX()+k][temp.getY()];
@@ -334,7 +378,7 @@ if(side == "l"){
 
  
 } // End IF 
-  else{ println("dios ");
+  else{ println("No hay movimientos disponibles ");
   }
  
  
@@ -383,7 +427,7 @@ Celda initRandom(){
   
 Celda temp = celdas.get(i);
 // Evita que selecciona al azar los bordes del mapa
-  if(temp.getX() == 600 || temp.getY() == 600){ 
+  if(temp.getX() == (n*k) || temp.getY() == (n*k)){ 
     //println("No queremos los bordes");
       temp = celdas.get(0);
   }
@@ -396,7 +440,6 @@ celdaColor(temp.getX(), temp.getY(),temp.getColor()); // Iluminamos la celda
   return temp;
   
 }
-
 
 
 /**
@@ -596,7 +639,22 @@ void setDown(boolean l){
 **/
 String toString(){
 return ("("+x+","+y+")"+ "("+z+","+w+")" + " Visited: " + Visited + " Done: " + Done + " Color: " + farbe);
-} 
+}
+
+
+/**
+**@params 
+**@return String
+**/
+String toSalida(){
+   // Lados 
+  int left = (this.Left)? 1: 0;
+  int right = (this.Right)? 1 : 0;
+  int down =  (this.Down ) ? 1 : 0;
+  int up = (this.Up)? 1 :0;
+  
+return (x +" " + y+" "+left +" "+right+" "+up+" "+down); 
+}
    
 }
 
